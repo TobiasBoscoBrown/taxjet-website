@@ -5,8 +5,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '/taxjet-website',
-  assetPrefix: '/taxjet-website',
 }
 
 const withMDX = createMDX({
