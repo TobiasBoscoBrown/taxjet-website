@@ -26,58 +26,88 @@ export default function Home() {
         style={{ y, opacity }}
         className="relative z-20 min-h-screen flex items-center justify-center px-6"
       >
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="mb-6"
-          >
-            <span className="text-sm font-medium tracking-widest text-white/60 uppercase">
-              U.S. Expat & International Tax Specialists
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-8"
-          >
-            Navigate Foreign Income
-            <br />
-            <span className="text-white/60">Without Turbulence</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6 }}
-            className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed"
-          >
-            We help Americans worldwide handle foreign income, overseas assets, and cross-border tax rules quickly, clearly, and without turbulence.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-white text-black rounded-full text-lg font-medium hover:bg-white/90 transition-colors"
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div className="text-center md:text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="mb-6"
             >
-              Get Started
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 border border-white/30 rounded-full text-lg font-medium hover:bg-white/10 transition-colors"
+              <span className="text-sm font-medium tracking-widest text-white/60 uppercase">
+                U.S. Expat & International Tax Specialists
+              </span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8"
             >
-              Learn More
-            </motion.button>
+              Navigate Foreign Income
+              <br />
+              <span className="text-white/60">Without Turbulence</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.6 }}
+              className="text-xl md:text-2xl text-white/70 max-w-xl mb-12 leading-relaxed"
+            >
+              We help Americans worldwide handle foreign income, overseas assets, and cross-border tax rules quickly, clearly, and without turbulence.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-white text-black rounded-full text-lg font-medium hover:bg-white/90 transition-colors"
+              >
+                Get Started
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 border border-white/30 rounded-full text-lg font-medium hover:bg-white/10 transition-colors"
+              >
+                Learn More
+              </motion.button>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.3 }}
+            className="relative"
+          >
+            <div className="relative w-full aspect-square max-w-md mx-auto">
+              {/* Glow effect behind jet */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-transparent rounded-full blur-3xl" />
+              
+              {/* Jet image placeholder - replace with actual image */}
+              <motion.div
+                animate={{ 
+                  y: [0, -20, 0],
+                  rotate: [-2, 2, -2]
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="relative z-10 w-full h-full flex items-center justify-center"
+              >
+                <div className="text-9xl">✈️</div>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </motion.section>
