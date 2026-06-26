@@ -16,7 +16,7 @@ export default function Services() {
         "Expatriation tax planning",
         "Inbound/outbound investment structuring"
       ],
-      icon: "🌍"
+      icon: "globe"
     },
     {
       title: "U.S. Tax Returns",
@@ -28,7 +28,7 @@ export default function Services() {
         "Catch-up filing for prior years",
         "Tax planning and strategy"
       ],
-      icon: "📋"
+      icon: "clipboard"
     },
     {
       title: "FBAR Reporting",
@@ -40,7 +40,7 @@ export default function Services() {
         "Penalty assessment review",
         "Voluntary disclosure assistance"
       ],
-      icon: "💳"
+      icon: "card"
     },
     {
       title: "Stress-Free Filing",
@@ -52,7 +52,7 @@ export default function Services() {
         "Direct expert access",
         "Final review and filing"
       ],
-      icon: "✨"
+      icon: "star"
     }
   ];
 
@@ -97,7 +97,37 @@ export default function Services() {
                 whileHover={{ y: -10 }}
                 className="p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all"
               >
-                <div className="text-5xl mb-6">{service.icon}</div>
+                <div className="mb-6">
+                  {service.icon === 'globe' && (
+                    <svg className="w-14 h-14 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20" />
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                  )}
+                  {service.icon === 'clipboard' && (
+                    <svg className="w-14 h-14 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M9 2v2" />
+                      <path d="M15 2v2" />
+                      <path d="M12 2v8" />
+                      <path d="M8 4h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+                      <path d="M9 14h6" />
+                      <path d="M9 18h6" />
+                    </svg>
+                  )}
+                  {service.icon === 'card' && (
+                    <svg className="w-14 h-14 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <rect x="2" y="5" width="20" height="14" rx="2" />
+                      <path d="M2 10h20" />
+                      <path d="M6 15h4" />
+                    </svg>
+                  )}
+                  {service.icon === 'star' && (
+                    <svg className="w-14 h-14 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  )}
+                </div>
                 <h3 className="text-3xl font-bold mb-4">{service.title}</h3>
                 <p className="text-white/60 leading-relaxed mb-6">{service.description}</p>
                 <ul className="space-y-3">

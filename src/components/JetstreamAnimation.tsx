@@ -81,29 +81,6 @@ export default function JetstreamAnimation() {
           style={{ strokeDasharray: '2000', strokeDashoffset: 0 }}
         />
 
-        {/* Expanding particle trail */}
-        {[...Array(30)].map((_, i) => (
-          <motion.circle
-            key={i}
-            r={1 + Math.random() * 3}
-            fill="rgba(255, 255, 255, 0.4)"
-            filter="url(#softGlow)"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{
-              opacity: [0, 0.6, 0],
-              scale: [0, 1.5, 0],
-              cx: [50 + i * 80, 150 + i * 80],
-              cy: [540 + Math.sin(i * 0.5) * 15, 540 + Math.sin(i * 0.5 + 1) * 15]
-            }}
-            transition={{
-              duration: 2 + Math.random() * 2,
-              repeat: Infinity,
-              delay: i * 0.15,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-
         {/* Jet image */}
         <motion.img
           src="/jet.png"

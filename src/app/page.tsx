@@ -92,7 +92,7 @@ export default function Home() {
               {/* Glow effect behind jet */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-transparent rounded-full blur-3xl" />
               
-              {/* Jet image placeholder - replace with actual image */}
+              {/* Jet image */}
               <motion.div
                 animate={{ 
                   y: [0, -20, 0],
@@ -105,7 +105,7 @@ export default function Home() {
                 }}
                 className="relative z-10 w-full h-full flex items-center justify-center"
               >
-                <div className="text-9xl">✈️</div>
+                <img src="/jet.png" alt="TaxJet" className="w-full max-w-xs object-contain drop-shadow-2xl" />
               </motion.div>
             </div>
           </motion.div>
@@ -133,17 +133,17 @@ export default function Home() {
               {
                 title: "International Tax Services",
                 description: "Navigate U.S. international tax laws with confidence and ensure compliance.",
-                icon: "🌍"
+                icon: "globe"
               },
               {
                 title: "U.S. Tax Returns",
                 description: "Federal and state tax returns, extensions, amended returns, and catch-up filing.",
-                icon: "📋"
+                icon: "clipboard"
               },
               {
                 title: "FBAR Reporting",
                 description: "Meet all foreign account reporting requirements while staying compliant.",
-                icon: "💳"
+                icon: "card"
               }
             ].map((service, index) => (
               <motion.div
@@ -155,7 +155,32 @@ export default function Home() {
                 whileHover={{ y: -10 }}
                 className="p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors"
               >
-                <div className="text-4xl mb-4">{service.icon}</div>
+                <div className="mb-4">
+                  {service.icon === 'globe' && (
+                    <svg className="w-12 h-12 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20" />
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                  )}
+                  {service.icon === 'clipboard' && (
+                    <svg className="w-12 h-12 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M9 2v2" />
+                      <path d="M15 2v2" />
+                      <path d="M12 2v8" />
+                      <path d="M8 4h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+                      <path d="M9 14h6" />
+                      <path d="M9 18h6" />
+                    </svg>
+                  )}
+                  {service.icon === 'card' && (
+                    <svg className="w-12 h-12 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <rect x="2" y="5" width="20" height="14" rx="2" />
+                      <path d="M2 10h20" />
+                      <path d="M6 15h4" />
+                    </svg>
+                  )}
+                </div>
                 <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
                 <p className="text-white/60 leading-relaxed">{service.description}</p>
               </motion.div>
