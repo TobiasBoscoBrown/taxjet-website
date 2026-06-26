@@ -2,6 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import Link from 'next/link';
+
+const navItems = ['About', 'Services', 'Process', 'Blog', 'Contact'];
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,40 +17,45 @@ export default function Navigation() {
       className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="text-2xl font-bold tracking-tight text-white"
-        >
-          TaxJet
-        </motion.div>
+        <Link href="/">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="text-2xl font-bold tracking-tight text-white cursor-pointer"
+          >
+            TaxJet
+          </motion.div>
+        </Link>
 
         <div className="hidden md:flex items-center space-x-8">
-          {['About', 'Services', 'Process', 'Blog', 'Contact'].map((item) => (
-            <motion.a
-              key={item}
-              href={`/${item.toLowerCase()}`}
-              className="text-white/70 hover:text-white transition-colors text-sm font-medium"
+          {navItems.map((item) => (
+            <Link key={item} href={`/${item.toLowerCase()}`}>
+              <motion.span
+                className="text-white/70 hover:text-white transition-colors text-sm font-medium cursor-pointer"
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
+              >
+                {item}
+              </motion.span>
+            </Link>
+          ))}
+          <Link href="/blog-cms">
+            <motion.span
+              className="text-white/50 hover:text-white transition-colors text-sm font-medium cursor-pointer"
               whileHover={{ y: -2 }}
               transition={{ duration: 0.2 }}
             >
-              {item}
-            </motion.a>
-          ))}
-          <motion.a
-            href="/blog-cms"
-            className="text-white/50 hover:text-white transition-colors text-sm font-medium"
-            whileHover={{ y: -2 }}
-            transition={{ duration: 0.2 }}
-          >
-            CMS
-          </motion.a>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 py-2 bg-white text-black rounded-full text-sm font-medium hover:bg-white/90 transition-colors"
-          >
-            Get Started
-          </motion.button>
+              CMS
+            </motion.span>
+          </Link>
+          <Link href="/contact">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-2 bg-white text-black rounded-full text-sm font-medium hover:bg-white/90 transition-colors"
+            >
+              Get Started
+            </motion.button>
+          </Link>
         </div>
 
         <button
@@ -71,21 +79,18 @@ export default function Navigation() {
           className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10"
         >
           <div className="px-6 py-4 space-y-4">
-            {['About', 'Services', 'Process', 'Blog', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href={`/${item.toLowerCase()}`}
-                className="block text-white/70 hover:text-white transition-colors"
-              >
-                {item}
-              </a>
+            {navItems.map((item) => (
+              <Link key={item} href={`/${item.toLowerCase()}`}>
+                <span className="block text-white/70 hover:text-white transition-colors cursor-pointer">
+                  {item}
+                </span>
+              </Link>
             ))}
-            <a
-              href="/blog-cms"
-              className="block text-white/50 hover:text-white transition-colors"
-            >
-              CMS
-            </a>
+            <Link href="/blog-cms">
+              <span className="block text-white/50 hover:text-white transition-colors cursor-pointer">
+                CMS
+              </span>
+            </Link>
           </div>
         </motion.div>
       )}
