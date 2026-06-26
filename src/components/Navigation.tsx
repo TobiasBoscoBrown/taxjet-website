@@ -33,6 +33,14 @@ export default function Navigation() {
               {item}
             </motion.a>
           ))}
+          <motion.a
+            href="/blog-cms"
+            className="text-white/50 hover:text-white transition-colors text-sm font-medium"
+            whileHover={{ y: -2 }}
+            transition={{ duration: 0.2 }}
+          >
+            CMS
+          </motion.a>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -72,6 +80,12 @@ export default function Navigation() {
                 {item}
               </a>
             ))}
+            <a
+              href="/blog-cms"
+              className="block text-white/50 hover:text-white transition-colors"
+            >
+              CMS
+            </a>
           </div>
         </motion.div>
       )}
