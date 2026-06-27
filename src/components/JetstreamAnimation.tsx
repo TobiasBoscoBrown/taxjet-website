@@ -87,9 +87,9 @@ export default function JetstreamAnimation() {
           targetY = 0;
       }
 
-      // Calculate rotation to face target
+      // Calculate rotation to face target (add 90 degrees since jet image points up)
       const angle = Math.atan2(targetY - startY, targetX - startX);
-      const rotation = (angle * 180) / Math.PI;
+      const rotation = (angle * 180) / Math.PI + 90;
 
       setJets(prev => [...prev, {
         id,
@@ -140,8 +140,8 @@ export default function JetstreamAnimation() {
           const bubbleSpeed = 0.5 + Math.random() * 0.5;
           setBubbles(prev => [...prev, {
             id: bubbleIdRef.current++,
-            x: newX - Math.cos(angle) * 50,
-            y: newY - Math.sin(angle) * 50,
+            x: newX - Math.cos(angle) * 80,
+            y: newY - Math.sin(angle) * 80,
             vx: Math.cos(angle) * bubbleSpeed,
             vy: Math.sin(angle) * bubbleSpeed,
             life: 1,
@@ -208,7 +208,7 @@ export default function JetstreamAnimation() {
             cx={bubble.x}
             cy={bubble.y}
             r={bubble.size}
-            fill={`rgba(147, 197, 253, ${bubble.life * 0.3})`}
+            fill={`rgba(200, 210, 230, ${bubble.life * 0.15})`}
             filter="url(#bubbleGlow)"
           />
         ))}
