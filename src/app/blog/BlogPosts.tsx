@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Post } from '@/lib/posts';
+import type { Post } from '@/lib/posts';
 
 interface BlogPostsProps {
   posts: Post[];
