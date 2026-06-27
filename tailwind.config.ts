@@ -9,25 +9,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        paper: "#F6F4EF",
+        ink: "#16233A",
+        accent: "#2F5FE0",
+        sky: { 50: "#F4F8FF", 100: "#E7F0FF", 200: "#CFE0FB" },
+        stamp: "#9A3B3B",
       },
-      animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'jetstream': 'jetstream 20s linear infinite',
+      fontFamily: {
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
       },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        jetstream: {
-          '0%': { strokeDashoffset: '1000' },
-          '100%': { strokeDashoffset: '0' },
-        }
-      }
+      letterSpacing: { widest2: "0.28em" },
+      transitionTimingFunction: { cinematic: "cubic-bezier(0.25,0.1,0.25,1)" },
     },
   },
   plugins: [],
 };
+
 export default config;

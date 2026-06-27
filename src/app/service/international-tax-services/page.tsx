@@ -2,12 +2,10 @@
 
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 export default function InternationalTaxServices() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-      <AtmosphericTextures />
+    <main className="min-h-screen bg-transparent text-ink">
       <Navigation />
 
       <section className="relative z-20 min-h-[60vh] flex items-center justify-center px-6 pt-20">
@@ -24,7 +22,7 @@ export default function InternationalTaxServices() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto"
+            className="text-xl md:text-2xl text-ink/65 max-w-3xl mx-auto"
           >
             We'll take the guesswork out of navigating U.S. international tax laws while helping you ensure compliance with U.S. tax regulations.
           </motion.p>
@@ -40,21 +38,21 @@ export default function InternationalTaxServices() {
             transition={{ duration: 0.8 }}
             className="space-y-8"
           >
-            <div className="p-8 border border-white/10 rounded-2xl bg-white/5">
+            <div className="p-8 border border-ink/10 rounded-2xl bg-white/60">
               <h3 className="text-2xl font-bold mb-4">Foreign Tax Credit Optimization</h3>
-              <p className="text-white/60 leading-relaxed">Maximize your foreign tax credits to reduce double taxation on foreign income.</p>
+              <p className="text-ink/65 leading-relaxed">Maximize your foreign tax credits to reduce double taxation on foreign income.</p>
             </div>
-            <div className="p-8 border border-white/10 rounded-2xl bg-white/5">
+            <div className="p-8 border border-ink/10 rounded-2xl bg-white/60">
               <h3 className="text-2xl font-bold mb-4">Treaty Benefit Analysis</h3>
-              <p className="text-white/60 leading-relaxed">Leverage U.S. tax treaties to minimize your tax liability across countries.</p>
+              <p className="text-ink/65 leading-relaxed">Leverage U.S. tax treaties to minimize your tax liability across countries.</p>
             </div>
-            <div className="p-8 border border-white/10 rounded-2xl bg-white/5">
+            <div className="p-8 border border-ink/10 rounded-2xl bg-white/60">
               <h3 className="text-2xl font-bold mb-4">Cross-Border Tax Planning</h3>
-              <p className="text-white/60 leading-relaxed">Strategic planning for investments, retirement, and business operations across borders.</p>
+              <p className="text-ink/65 leading-relaxed">Strategic planning for investments, retirement, and business operations across borders.</p>
             </div>
-            <div className="p-8 border border-white/10 rounded-2xl bg-white/5">
+            <div className="p-8 border border-ink/10 rounded-2xl bg-white/60">
               <h3 className="text-2xl font-bold mb-4">Expatriation Tax Planning</h3>
-              <p className="text-white/60 leading-relaxed">Navigate the complex tax implications of expatriating from the U.S.</p>
+              <p className="text-ink/65 leading-relaxed">Navigate the complex tax implications of expatriating from the U.S.</p>
             </div>
           </motion.div>
         </div>

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 interface Post {
   slug: string;
@@ -253,18 +252,17 @@ ${editingPost.content || ''}`;
 
   if (!isAuthenticated) {
     return (
-      <main className="min-h-screen bg-[#0a0a0a] text-white">
-        <AtmosphericTextures />
+      <main className="min-h-screen bg-transparent text-ink">
         <Navigation />
 
         <section className="relative z-20 min-h-screen flex items-center justify-center px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-md w-full p-8 border border-white/10 rounded-2xl bg-white/5"
+            className="max-w-md w-full p-8 border border-ink/10 rounded-2xl bg-white/60"
           >
             <h1 className="text-3xl font-bold mb-6 text-center">Blog CMS</h1>
-            <p className="text-white/60 mb-6 text-center">Enter password to access</p>
+            <p className="text-ink/65 mb-6 text-center">Enter password to access</p>
             
             <input
               type="password"
@@ -272,7 +270,7 @@ ${editingPost.content || ''}`;
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
               placeholder="Password"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white mb-4"
+              className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink mb-4"
             />
             
             {error && <p className="text-red-400 mb-4 text-center">{error}</p>}
@@ -281,7 +279,7 @@ ${editingPost.content || ''}`;
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleLogin}
-              className="w-full px-6 py-3 bg-white text-black rounded-full font-medium"
+              className="w-full px-6 py-3 bg-ink text-paper rounded-full font-medium"
             >
               Access CMS
             </motion.button>
@@ -292,8 +290,7 @@ ${editingPost.content || ''}`;
   }
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-      <AtmosphericTextures />
+    <main className="min-h-screen bg-transparent text-ink">
       <Navigation />
 
       <section className="relative z-20 min-h-screen px-6 pt-20">
@@ -304,7 +301,7 @@ ${editingPost.content || ''}`;
             className="mb-12"
           >
             <h1 className="text-5xl font-bold mb-4">Blog CMS</h1>
-            <p className="text-xl text-white/60">Manage your blog posts</p>
+            <p className="text-xl text-ink/65">Manage your blog posts</p>
           </motion.div>
 
           {!isEditing ? (
@@ -313,7 +310,7 @@ ${editingPost.content || ''}`;
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleNew}
-                className="mb-8 px-6 py-3 bg-white text-black rounded-full font-medium"
+                className="mb-8 px-6 py-3 bg-ink text-paper rounded-full font-medium"
               >
                 + New Post
               </motion.button>
@@ -324,16 +321,16 @@ ${editingPost.content || ''}`;
                     key={post.slug}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-6 border border-white/10 rounded-2xl bg-white/5 flex justify-between items-center"
+                    className="p-6 border border-ink/10 rounded-2xl bg-white/60 flex justify-between items-center"
                   >
                     <div>
                       <h3 className="text-xl font-bold mb-2">{post.title}</h3>
-                      <p className="text-white/60 text-sm">{post.date} • {post.category}</p>
+                      <p className="text-ink/65 text-sm">{post.date} • {post.category}</p>
                     </div>
                     <div className="flex gap-4">
                       <button
                         onClick={() => handleEdit(post)}
-                        className="px-4 py-2 border border-white/30 rounded-lg hover:bg-white/10 transition-colors"
+                        className="px-4 py-2 border border-ink/25 rounded-lg hover:bg-ink/[0.06] transition-colors"
                       >
                         Edit
                       </button>
@@ -352,7 +349,7 @@ ${editingPost.content || ''}`;
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-8 border border-white/10 rounded-2xl bg-white/5"
+              className="p-8 border border-ink/10 rounded-2xl bg-white/60"
             >
               <h2 className="text-3xl font-bold mb-8">
                 {editingPost.slug ? 'Edit Post' : 'New Post'}
@@ -360,37 +357,37 @@ ${editingPost.content || ''}`;
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Title</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Title</label>
                   <input
                     type="text"
                     value={editingPost.title || ''}
                     onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Category</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Category</label>
                   <input
                     type="text"
                     value={editingPost.category || ''}
                     onChange={(e) => setEditingPost({ ...editingPost, category: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Excerpt</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Excerpt</label>
                   <textarea
                     value={editingPost.excerpt || ''}
                     onChange={(e) => setEditingPost({ ...editingPost, excerpt: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white resize-none"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Hero Image</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Hero Image</label>
                   <div
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
@@ -399,7 +396,7 @@ ${editingPost.content || ''}`;
                     className={`w-full p-8 border-2 border-dashed rounded-lg cursor-pointer transition-colors text-center ${
                       isDragging
                         ? 'border-blue-400 bg-blue-400/10'
-                        : 'border-white/20 bg-white/5 hover:bg-white/10'
+                        : 'border-ink/15 bg-white/60 hover:bg-ink/[0.06]'
                     }`}
                   >
                     <input
@@ -416,17 +413,17 @@ ${editingPost.content || ''}`;
                           alt="Hero preview"
                           className="max-h-40 mx-auto rounded-lg object-contain"
                         />
-                        <p className="text-white/60 text-sm">{editingPost.heroImage}</p>
-                        <p className="text-white/40 text-xs">Drop or click to replace</p>
+                        <p className="text-ink/65 text-sm">{editingPost.heroImage}</p>
+                        <p className="text-ink/50 text-xs">Drop or click to replace</p>
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        <p className="text-white/60">Drop an image here, or click to upload</p>
-                        <p className="text-white/40 text-xs">PNG, JPG, GIF up to 5MB</p>
+                        <p className="text-ink/65">Drop an image here, or click to upload</p>
+                        <p className="text-ink/50 text-xs">PNG, JPG, GIF up to 5MB</p>
                       </div>
                     )}
                     {isUploading && (
-                      <p className="text-blue-400 text-sm mt-2">Uploading to GitHub...</p>
+                      <p className="text-accent text-sm mt-2">Uploading to GitHub...</p>
                     )}
                     {uploadError && (
                       <p className="text-red-400 text-sm mt-2">{uploadError}</p>
@@ -435,12 +432,12 @@ ${editingPost.content || ''}`;
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Content (Markdown)</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Content (Markdown)</label>
                   <textarea
                     value={editingPost.content || ''}
                     onChange={(e) => setEditingPost({ ...editingPost, content: e.target.value })}
                     rows={15}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white resize-none font-mono"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink resize-none font-mono"
                   />
                 </div>
 
@@ -449,7 +446,7 @@ ${editingPost.content || ''}`;
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleSave}
-                    className="px-8 py-3 bg-white text-black rounded-full font-medium"
+                    className="px-8 py-3 bg-ink text-paper rounded-full font-medium"
                   >
                     Save Post
                   </motion.button>
@@ -461,7 +458,7 @@ ${editingPost.content || ''}`;
                       setEditingPost({});
                       setHeroImageFile(null);
                     }}
-                    className="px-8 py-3 border border-white/30 rounded-full font-medium hover:bg-white/10 transition-colors"
+                    className="px-8 py-3 border border-ink/25 rounded-full font-medium hover:bg-ink/[0.06] transition-colors"
                   >
                     Cancel
                   </motion.button>

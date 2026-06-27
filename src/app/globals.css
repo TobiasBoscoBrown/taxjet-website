@@ -3,66 +3,58 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #fafafa;
+  --paper: #f6f4ef;
+  --ink: #16233a;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* High-altitude sky: a soft dawn gradient behind everything, fixed so the
+   whole site reads as one continuous, borderless atmosphere. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% -10%, #eaf2ff 0%, rgba(234,242,255,0) 55%),
+    radial-gradient(100% 60% at 85% 8%, #fdf3ec 0%, rgba(253,243,236,0) 60%),
+    linear-gradient(180deg, #f0f5fd 0%, var(--paper) 32%, var(--paper) 100%);
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-.atmospheric-texture {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.03;
-  background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px),
-    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
+  .text-balance { text-wrap: balance; }
 }
 
 .document-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
-  z-index: 1;
-  opacity: 1;
+  z-index: -1;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
+::-webkit-scrollbar { width: 9px; }
+::-webkit-scrollbar-track { background: var(--paper); }
+::-webkit-scrollbar-thumb { background: rgba(22,35,58,0.18); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(22,35,58,0.3); }
+::selection { background: rgba(47,95,224,0.16); }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }

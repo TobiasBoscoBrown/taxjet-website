@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 export default function Process() {
   const steps = [
@@ -29,8 +28,7 @@ export default function Process() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-      <AtmosphericTextures />
+    <main className="min-h-screen bg-transparent text-ink">
       <Navigation />
 
       {/* Hero */}
@@ -48,7 +46,7 @@ export default function Process() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto"
+            className="text-xl md:text-2xl text-ink/65 max-w-3xl mx-auto"
           >
             Simple, transparent, and stress-free. Here's how we work together to get your taxes done right.
           </motion.p>
@@ -69,11 +67,11 @@ export default function Process() {
                 className="flex gap-8 items-start"
               >
                 <div className="flex-shrink-0">
-                  <div className="text-6xl font-bold text-white/20">{step.number}</div>
+                  <div className="text-6xl font-bold text-ink/35">{step.number}</div>
                 </div>
                 <div className="flex-1 pt-2">
                   <h3 className="text-3xl font-bold mb-4">{step.title}</h3>
-                  <p className="text-xl text-white/60 leading-relaxed">{step.description}</p>
+                  <p className="text-xl text-ink/65 leading-relaxed">{step.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -82,7 +80,7 @@ export default function Process() {
       </section>
 
       {/* Testimonials */}
-      <section className="relative z-20 py-32 px-6 bg-white/[0.02]">
+      <section className="relative z-20 py-32 px-6 bg-white/600">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -118,12 +116,12 @@ export default function Process() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
-                className="p-8 rounded-2xl border border-white/10 bg-white/5"
+                className="p-8 rounded-2xl border border-ink/10 bg-white/60"
               >
-                <p className="text-white/80 leading-relaxed mb-6 italic">"{testimonial.text}"</p>
+                <p className="text-ink/80 leading-relaxed mb-6 italic">"{testimonial.text}"</p>
                 <div>
                   <div className="font-bold">{testimonial.name}</div>
-                  <div className="text-white/60 text-sm">{testimonial.location}</div>
+                  <div className="text-ink/65 text-sm">{testimonial.location}</div>
                 </div>
               </motion.div>
             ))}
@@ -144,7 +142,7 @@ export default function Process() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-12 py-5 bg-white text-black rounded-full text-xl font-medium hover:bg-white/90 transition-colors"
+              className="px-12 py-5 bg-ink text-paper rounded-full text-xl font-medium hover:bg-accent transition-colors"
             >
               Begin Your Journey
             </motion.button>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 interface Post {
   slug: string;
@@ -93,8 +92,7 @@ export default function BlogAdmin() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-      <AtmosphericTextures />
+    <main className="min-h-screen bg-transparent text-ink">
       <Navigation />
 
       <section className="relative z-20 min-h-screen px-6 pt-20">
@@ -105,7 +103,7 @@ export default function BlogAdmin() {
             className="mb-12"
           >
             <h1 className="text-5xl font-bold mb-4">Blog Admin</h1>
-            <p className="text-xl text-white/60">Manage your blog posts</p>
+            <p className="text-xl text-ink/65">Manage your blog posts</p>
           </motion.div>
 
           {!isEditing ? (
@@ -114,7 +112,7 @@ export default function BlogAdmin() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleNew}
-                className="mb-8 px-6 py-3 bg-white text-black rounded-full font-medium"
+                className="mb-8 px-6 py-3 bg-ink text-paper rounded-full font-medium"
               >
                 + New Post
               </motion.button>
@@ -125,16 +123,16 @@ export default function BlogAdmin() {
                     key={post.slug}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-6 border border-white/10 rounded-2xl bg-white/5 flex justify-between items-center"
+                    className="p-6 border border-ink/10 rounded-2xl bg-white/60 flex justify-between items-center"
                   >
                     <div>
                       <h3 className="text-xl font-bold mb-2">{post.title}</h3>
-                      <p className="text-white/60 text-sm">{post.date} • {post.category}</p>
+                      <p className="text-ink/65 text-sm">{post.date} • {post.category}</p>
                     </div>
                     <div className="flex gap-4">
                       <button
                         onClick={() => handleEdit(post)}
-                        className="px-4 py-2 border border-white/30 rounded-lg hover:bg-white/10 transition-colors"
+                        className="px-4 py-2 border border-ink/25 rounded-lg hover:bg-ink/[0.06] transition-colors"
                       >
                         Edit
                       </button>
@@ -153,7 +151,7 @@ export default function BlogAdmin() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-8 border border-white/10 rounded-2xl bg-white/5"
+              className="p-8 border border-ink/10 rounded-2xl bg-white/60"
             >
               <h2 className="text-3xl font-bold mb-8">
                 {editingPost.slug ? 'Edit Post' : 'New Post'}
@@ -161,52 +159,52 @@ export default function BlogAdmin() {
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Title</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Title</label>
                   <input
                     type="text"
                     value={editingPost.title || ''}
                     onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Category</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Category</label>
                   <input
                     type="text"
                     value={editingPost.category || ''}
                     onChange={(e) => setEditingPost({ ...editingPost, category: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Excerpt</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Excerpt</label>
                   <textarea
                     value={editingPost.excerpt || ''}
                     onChange={(e) => setEditingPost({ ...editingPost, excerpt: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white resize-none"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Hero Image</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Hero Image</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setHeroImageFile(e.target.files?.[0] || null)}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Content (Markdown)</label>
+                  <label className="block text-sm font-medium mb-2 text-ink/70">Content (Markdown)</label>
                   <textarea
                     value={editingPost.content || ''}
                     onChange={(e) => setEditingPost({ ...editingPost, content: e.target.value })}
                     rows={15}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white resize-none font-mono"
+                    className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink resize-none font-mono"
                   />
                 </div>
 
@@ -215,7 +213,7 @@ export default function BlogAdmin() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleSave}
-                    className="px-8 py-3 bg-white text-black rounded-full font-medium"
+                    className="px-8 py-3 bg-ink text-paper rounded-full font-medium"
                   >
                     Save Post
                   </motion.button>
@@ -227,7 +225,7 @@ export default function BlogAdmin() {
                       setEditingPost({});
                       setHeroImageFile(null);
                     }}
-                    className="px-8 py-3 border border-white/30 rounded-full font-medium hover:bg-white/10 transition-colors"
+                    className="px-8 py-3 border border-ink/25 rounded-full font-medium hover:bg-ink/[0.06] transition-colors"
                   >
                     Cancel
                   </motion.button>

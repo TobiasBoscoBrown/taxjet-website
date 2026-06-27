@@ -2,12 +2,10 @@
 
 import { motion } from 'framer-motion';
 import Navigation from '@/components/Navigation';
-import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 export default function ClientPortal() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-      <AtmosphericTextures />
+    <main className="min-h-screen bg-transparent text-ink">
       <Navigation />
 
       <section className="relative z-20 min-h-[60vh] flex items-center justify-center px-6 pt-20">
@@ -24,7 +22,7 @@ export default function ClientPortal() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto"
+            className="text-xl md:text-2xl text-ink/65 max-w-3xl mx-auto"
           >
             Get started today and experience stress-free expat tax filing
           </motion.p>
@@ -38,31 +36,31 @@ export default function ClientPortal() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="p-8 rounded-2xl border border-white/10 bg-white/5"
+            className="p-8 rounded-2xl border border-ink/10 bg-white/60"
           >
             <h2 className="text-2xl font-bold mb-8 text-center">Create Your Account</h2>
             <form className="space-y-6">
               <div>
-                <label className="block text-sm font-medium mb-2 text-white/70">Full Name</label>
+                <label className="block text-sm font-medium mb-2 text-ink/70">Full Name</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                  className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                   placeholder="John Doe"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2 text-white/70">Email</label>
+                <label className="block text-sm font-medium mb-2 text-ink/70">Email</label>
                 <input
                   type="email"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                  className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                   placeholder="john@example.com"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2 text-white/70">Password</label>
+                <label className="block text-sm font-medium mb-2 text-ink/70">Password</label>
                 <input
                   type="password"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                  className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                   placeholder="••••••••"
                 />
               </div>
@@ -70,13 +68,13 @@ export default function ClientPortal() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full px-8 py-4 bg-white text-black rounded-lg text-lg font-medium hover:bg-white/90 transition-colors"
+                className="w-full px-8 py-4 bg-ink text-paper rounded-lg text-lg font-medium hover:bg-accent transition-colors"
               >
                 Create Account
               </motion.button>
             </form>
-            <p className="text-center text-white/60 mt-6">
-              Already have an account? <a href="#" className="text-white hover:underline">Sign in</a>
+            <p className="text-center text-ink/65 mt-6">
+              Already have an account? <a href="#" className="text-ink hover:underline">Sign in</a>
             </p>
           </motion.div>
         </div>

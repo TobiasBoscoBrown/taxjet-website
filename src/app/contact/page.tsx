@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
-import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -19,8 +18,7 @@ export default function Contact() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
-      <AtmosphericTextures />
+    <main className="min-h-screen bg-transparent text-ink">
       <Navigation />
 
       {/* Hero */}
@@ -38,7 +36,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto"
+            className="text-xl md:text-2xl text-ink/65 max-w-3xl mx-auto"
           >
             Not sure where to start? Tell us about your situation and we'll guide you.
           </motion.p>
@@ -57,33 +55,33 @@ export default function Contact() {
             className="space-y-8"
           >
             <div>
-              <label className="block text-sm font-medium mb-2 text-white/70">Name</label>
+              <label className="block text-sm font-medium mb-2 text-ink/70">Name</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                 placeholder="Your name"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-white/70">Email</label>
+              <label className="block text-sm font-medium mb-2 text-ink/70">Email</label>
               <input
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
                 placeholder="your@email.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-white/70">What services are you looking for?</label>
+              <label className="block text-sm font-medium mb-2 text-ink/70">What services are you looking for?</label>
               <select
                 value={formData.service}
                 onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
+                className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink"
               >
                 <option value="">Select a service</option>
                 <option value="expat">I need help filing U.S. taxes as an expat</option>
@@ -96,12 +94,12 @@ export default function Contact() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-white/70">Tell us more about your situation</label>
+              <label className="block text-sm font-medium mb-2 text-ink/70">Tell us more about your situation</label>
               <textarea
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 rows={6}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white resize-none"
+                className="w-full px-4 py-3 bg-white/60 border border-ink/10 rounded-lg focus:outline-none focus:border-ink/25 transition-colors text-ink resize-none"
                 placeholder="Share any details that would help us understand your situation..."
               />
             </div>
@@ -110,7 +108,7 @@ export default function Contact() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full px-8 py-4 bg-white text-black rounded-lg text-lg font-medium hover:bg-white/90 transition-colors"
+              className="w-full px-8 py-4 bg-ink text-paper rounded-lg text-lg font-medium hover:bg-accent transition-colors"
             >
               Send Message
             </motion.button>
@@ -119,7 +117,7 @@ export default function Contact() {
       </section>
 
       {/* Alternative Contact */}
-      <section className="relative z-20 py-32 px-6 bg-white/[0.02]">
+      <section className="relative z-20 py-32 px-6 bg-white/600">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -128,13 +126,13 @@ export default function Contact() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-3xl font-bold mb-8">Prefer to Talk Directly?</h2>
-            <p className="text-xl text-white/60 mb-8">
+            <p className="text-xl text-ink/65 mb-8">
               Schedule a consultation with one of our tax experts.
             </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-12 py-5 bg-white text-black rounded-full text-xl font-medium hover:bg-white/90 transition-colors"
+              className="px-12 py-5 bg-ink text-paper rounded-full text-xl font-medium hover:bg-accent transition-colors"
             >
               Schedule Consultation
             </motion.button>
