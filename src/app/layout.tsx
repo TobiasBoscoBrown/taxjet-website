@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "TaxJet | U.S. Expat & International Tax Specialists",
     description: "We help Americans worldwide navigate foreign income, overseas assets, and cross-border tax issues quickly, clearly, and without turbulence.",
-    url: "https://taxjet.co",
+    url: "https://taxjet-website.vercel.app",
     siteName: "TaxJet",
     type: "website",
   },
