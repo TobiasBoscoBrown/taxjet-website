@@ -1,15 +1,17 @@
 'use client';
 
 import { motion, useScroll, useSpring, useMotionValueEvent } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 /**
  * The signature moving element: one plane drawing a jetstream contrail across
- * the high-altitude sky, driven entirely by scroll. When the page is still, the
+ * the high-altitude sky, driven entirely by scroll. When the page is still the
  * plane is still; everything else stays cinematic and motionless.
  *
- * Each load generates a fresh spawn point and flight path, and now and then the
- * plane pulls a full loop-de-loop somewhere along the way.
+ * Each page visit generates a fresh spawn point and flight path. Once in a while
+ * the plane eases through a calm, full loop-de-loop that stays tangent to its
+ * line of travel, so it reads as a smooth aerobatic arc rather than a jolt.
  */
 
 const VW = 1920;
@@ -18,20 +20,29 @@ const VH = 1080;
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
 
-// A full circular loop that starts and ends at (cx, cy + r), so the path can
-// continue cleanly afterward. k is the cubic-bezier circle constant.
-function loopDeLoop(cx: number, cy: number, r: number, dir: number) {
+// A full loop tangent to the direction of travel at point P, so entry and exit
+// share the same heading (no cusp). Built in local space then rotated by `ang`.
+function tangentLoop(px: number, py: number, ang: number, r: number, dir: number) {
   const k = 0.5523 * r;
-  const s = dir; // 1 or -1 -> loop winds one way or the other
-  return [
-    `C ${cx - s * k} ${cy + r} ${cx - s * r} ${cy + k} ${cx - s * r} ${cy}`,
-    `C ${cx - s * r} ${cy - k} ${cx - s * k} ${cy - r} ${cx} ${cy - r}`,
-    `C ${cx + s * k} ${cy - r} ${cx + s * r} ${cy - k} ${cx + s * r} ${cy}`,
-    `C ${cx + s * r} ${cy + k} ${cx + s * k} ${cy + r} ${cx} ${cy + r}`,
-  ].join(' ');
+  const s = dir; // winds up or down
+  // Local circle tangent to the x-axis at the origin, center (0, s*r).
+  const local: [number, number][] = [
+    [k, 0], [r, s * (r - k)], [r, s * r],
+    [r, s * (r + k)], [k, s * 2 * r], [0, s * 2 * r],
+    [-k, s * 2 * r], [-r, s * (r + k)], [-r, s * r],
+    [-r, s * (r - k)], [-k, 0], [0, 0],
+  ];
+  const cos = Math.cos((ang * Math.PI) / 180);
+  const sin = Math.sin((ang * Math.PI) / 180);
+  const pt = ([x, y]: [number, number]) =>
+    `${(px + x * cos - y * sin).toFixed(1)} ${(py + x * sin + y * cos).toFixed(1)}`;
+  let d = '';
+  for (let i = 0; i < local.length; i += 3) {
+    d += ` C ${pt(local[i])} ${pt(local[i + 1])} ${pt(local[i + 2])}`;
+  }
+  return d;
 }
 
-// Smooth Catmull-Rom path through waypoints, with an optional loop spliced in.
 function buildFlightPath() {
   const startY = rand(160, 860);
   const endY = rand(120, 820);
@@ -41,17 +52,17 @@ function buildFlightPath() {
     const t = i / segments;
     const x = -120 + t * (VW + 240);
     const baseY = startY + (endY - startY) * t;
-    pts.push([x, clamp(baseY + rand(-260, 260), 110, 960)]);
+    pts.push([x, clamp(baseY + rand(-240, 240), 130, 940)]);
   }
   pts.push([rand(VW + 120, VW + 320), endY]);
 
-  // 55% of loads get a loop, at one of the interior waypoints.
-  const doLoop = Math.random() < 0.55;
+  // Loop-de-loop is rare: about one visit in six.
+  const doLoop = Math.random() < 0.17;
   const loopIndex = doLoop ? 1 + Math.floor(Math.random() * (segments - 1)) : -1;
-  const loopR = rand(60, 100);
+  const loopR = rand(120, 165); // larger = calmer
   const loopDir = Math.random() < 0.5 ? 1 : -1;
 
-  let d = `M ${pts[0][0]} ${pts[0][1]}`;
+  let d = `M ${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[i - 1] || pts[i];
     const p1 = pts[i];
@@ -61,9 +72,10 @@ function buildFlightPath() {
     const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
     const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
     const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
-    d += ` C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${p2[0]} ${p2[1]}`;
+    d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)} ${cp2x.toFixed(1)} ${cp2y.toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
     if (i + 1 === loopIndex) {
-      d += ' ' + loopDeLoop(p2[0], p2[1], loopR, loopDir);
+      const ang = (Math.atan2(p3[1] - p1[1], p3[0] - p1[0]) * 180) / Math.PI;
+      d += tangentLoop(p2[0], p2[1], ang, loopR, loopDir);
     }
   }
   return d;
@@ -72,8 +84,10 @@ function buildFlightPath() {
 const DEFAULT_PATH = `M -200 760 C 360 700, 980 540, 2080 220`;
 
 export default function JetstreamAnimation() {
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 60, damping: 22, mass: 0.5 });
+  // Gentle spring so the plane glides calmly instead of snapping to scroll.
+  const progress = useSpring(scrollYProgress, { stiffness: 48, damping: 24, mass: 0.6 });
 
   const pathRef = useRef<SVGPathElement>(null);
   const [pathD, setPathD] = useState(DEFAULT_PATH);
@@ -91,12 +105,11 @@ export default function JetstreamAnimation() {
     setPlane({ x: a.x, y: a.y, angle });
   };
 
-  // Randomize the flight path on the client only (avoids hydration mismatch).
+  // Fresh path on every page visit (mount + route change).
   useEffect(() => {
     setPathD(buildFlightPath());
-  }, []);
+  }, [pathname]);
 
-  // Re-measure whenever the path changes.
   useEffect(() => {
     place(progress.get() || 0.0001);
     // eslint-disable-next-line react-hooks/exhaustive-deps

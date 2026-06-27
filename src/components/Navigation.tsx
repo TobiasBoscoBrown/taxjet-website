@@ -4,7 +4,7 @@ import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
 
-const navItems = ['About', 'Services', 'Process', 'Blog', 'Contact'];
+const navItems = ['About', 'Services', 'Process', 'Blog', 'FAQ', 'Contact'];
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

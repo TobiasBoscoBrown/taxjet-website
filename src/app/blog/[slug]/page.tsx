@@ -49,7 +49,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
             </div>
           )}
 
-          <div className="prose prose-invert prose-lg max-w-none">
+          <div className="article-body">
             <MDXRemote source={post.content || ''} />
           </div>
         </div>
