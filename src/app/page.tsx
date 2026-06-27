@@ -80,33 +80,6 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.3 }}
-            className="relative"
-          >
-            <div className="relative w-full aspect-square max-w-md mx-auto">
-              {/* Glow effect behind jet */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-transparent rounded-full blur-3xl" />
-              
-              {/* Jet image */}
-              <motion.div
-                animate={{ 
-                  y: [0, -20, 0],
-                  rotate: [-2, 2, -2]
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="relative z-10 w-full h-full flex items-center justify-center"
-              >
-                <img src="/jet.png" alt="TaxJet" className="w-full max-w-xs object-contain drop-shadow-2xl" />
-              </motion.div>
-            </div>
-          </motion.div>
         </div>
       </motion.section>
 

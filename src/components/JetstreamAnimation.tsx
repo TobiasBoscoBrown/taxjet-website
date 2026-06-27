@@ -8,12 +8,27 @@ export default function JetstreamAnimation() {
 
   const jetX = useTransform(scrollYProgress, [0, 1], [-150, 2070]);
   const jetY = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [540, 380, 620, 420, 540]);
-  const jetRotate = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [-8, 6, -6, 5, -3]);
+
+  // Rotate jet based on slope of its flight path
+  const jetRotate = useTransform(
+    scrollYProgress,
+    [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
+    [-6, -10, 6, 8, -6, -8, 5, 7, -3]
+  );
+
+  // Companion jet follows a similar but offset path
+  const companionX = useTransform(scrollYProgress, [0, 1], [-250, 1970]);
+  const companionY = useTransform(scrollYProgress, [0, 0.25, 0.5, 0.75, 1], [640, 480, 720, 520, 640]);
+  const companionRotate = useTransform(
+    scrollYProgress,
+    [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1],
+    [-4, -8, 4, 6, -4, -6, 3, 5, -2]
+  );
 
   const trailPath = useMemo(() => {
     const points = [];
-    for (let i = 0; i <= 50; i++) {
-      const t = i / 50;
+    for (let i = 0; i <= 60; i++) {
+      const t = i / 60;
       const x = -150 + t * 2220;
       const y = 540 + Math.sin(t * Math.PI * 3) * 120 + Math.cos(t * Math.PI * 2) * 60;
       points.push({ x, y });
@@ -35,10 +50,18 @@ export default function JetstreamAnimation() {
       <svg className="w-full h-full" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="jetstreamGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(59, 130, 246, 0.8)" />
-            <stop offset="20%" stopColor="rgba(59, 130, 246, 0.5)" />
-            <stop offset="50%" stopColor="rgba(147, 197, 253, 0.3)" />
+            <stop offset="0%" stopColor="rgba(59, 130, 246, 0.7)" />
+            <stop offset="20%" stopColor="rgba(59, 130, 246, 0.4)" />
+            <stop offset="50%" stopColor="rgba(147, 197, 253, 0.25)" />
             <stop offset="80%" stopColor="rgba(59, 130, 246, 0.1)" />
+            <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
+          </linearGradient>
+
+          <linearGradient id="constantStreamGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="rgba(59, 130, 246, 0)" />
+            <stop offset="20%" stopColor="rgba(59, 130, 246, 0.15)" />
+            <stop offset="50%" stopColor="rgba(147, 197, 253, 0.2)" />
+            <stop offset="80%" stopColor="rgba(59, 130, 246, 0.15)" />
             <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
           </linearGradient>
 
@@ -61,11 +84,34 @@ export default function JetstreamAnimation() {
           </filter>
         </defs>
 
-        {/* Trail path that follows the jet's flight path */}
+        {/* Constant background stream across the screen */}
+        <motion.path
+          d="M -200 540 C 200 520, 600 500, 960 540 S 1720 580, 2120 540"
+          stroke="url(#constantStreamGradient)"
+          strokeWidth="120"
+          fill="none"
+          filter="url(#glow)"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          transition={{ duration: 2 }}
+        />
+
+        <motion.path
+          d="M -200 540 C 200 510, 600 480, 960 540 S 1720 600, 2120 540"
+          stroke="url(#constantStreamGradient)"
+          strokeWidth="60"
+          fill="none"
+          filter="url(#softGlow)"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.4 }}
+          transition={{ duration: 2, delay: 0.3 }}
+        />
+
+        {/* Dynamic trail following the main jet */}
         <motion.path
           d={trailD}
           stroke="url(#jetstreamGradient)"
-          strokeWidth="6"
+          strokeWidth="5"
           fill="none"
           filter="url(#glow)"
           strokeLinecap="round"
@@ -77,8 +123,8 @@ export default function JetstreamAnimation() {
 
         <motion.path
           d={trailD}
-          stroke="rgba(255, 255, 255, 0.25)"
-          strokeWidth="2"
+          stroke="rgba(255, 255, 255, 0.2)"
+          strokeWidth="1.5"
           fill="none"
           filter="url(#softGlow)"
           strokeLinecap="round"
@@ -88,7 +134,7 @@ export default function JetstreamAnimation() {
           }}
         />
 
-        {/* Jet image that follows scroll */}
+        {/* Main jet image that follows scroll */}
         <motion.g
           style={{
             x: jetX,
@@ -103,6 +149,25 @@ export default function JetstreamAnimation() {
             x="-70"
             y="-35"
             filter="url(#glow)"
+          />
+        </motion.g>
+
+        {/* Companion jet following alongside */}
+        <motion.g
+          style={{
+            x: companionX,
+            y: companionY,
+            rotate: companionRotate
+          }}
+          opacity={0.7}
+        >
+          <image
+            href="/jet.png"
+            width="80"
+            height="40"
+            x="-40"
+            y="-20"
+            filter="url(#softGlow)"
           />
         </motion.g>
       </svg>
