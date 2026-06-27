@@ -1,31 +1,20 @@
 'use client';
 
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function JetstreamAnimation() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const [isMounted, setIsMounted] = useState(false);
+  const { scrollYProgress } = useScroll();
 
-  useEffect(() => {
-    setIsMounted(true);
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
+  // Jet flies across the screen with scroll
+  const jetX = useTransform(scrollYProgress, [0, 1], [-400, 2320]);
+  const jetY = useTransform(scrollYProgress, [0, 0.5, 1], [650, 500, 550]);
 
-  // Jet follows mouse with smooth lag
-  const jetX = useTransform(mouseX, [0, 1920], [-200, 2120]);
-  const jetY = useTransform(mouseY, [0, 1080], [-100, 1180]);
-
-  // Rotate jet based on mouse movement direction
-  const jetRotate = useTransform(mouseX, [0, 1920], [-5, 5]);
-
-  if (!isMounted) return null;
+  // Subtle rotation as it flies
+  const jetRotate = useTransform(
+    scrollYProgress,
+    [0, 0.25, 0.5, 0.75, 1],
+    [-3, 4, -2, 3, -1]
+  );
 
   return (
     <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
@@ -88,11 +77,8 @@ export default function JetstreamAnimation() {
           transition={{ duration: 2, ease: "easeOut", delay: 0.2 }}
         />
 
-        {/* Jet follows mouse with smooth motion */}
-        <motion.g
-          style={{ x: jetX, y: jetY, rotate: jetRotate }}
-          transition={{ type: "spring", stiffness: 150, damping: 20 }}
-        >
+        {/* Jet flies with scroll */}
+        <motion.g style={{ x: jetX, y: jetY, rotate: jetRotate }}>
           <image
             href="/jet.png"
             width="450"
