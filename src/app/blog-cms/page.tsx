@@ -25,6 +25,9 @@ export default function BlogCMS() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingPost, setEditingPost] = useState<Partial<Post>>({});
   const [heroImageFile, setHeroImageFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleLogin = () => {
     if (password === CMS_PASSWORD) {
@@ -172,6 +175,82 @@ ${editingPost.content || ''}`;
     setIsEditing(true);
   };
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      setHeroImageFile(files[0]);
+      uploadImage(files[0]);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setHeroImageFile(files[0]);
+      uploadImage(files[0]);
+    }
+  };
+
+  const uploadImage = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please upload an image file');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError('');
+
+    try {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = async () => {
+        const base64String = (reader.result as string).split(',')[1];
+        const fileName = `images/${Date.now()}-${file.name.replace(/\s+/g, '-').toLowerCase()}`;
+
+        const token = prompt('Enter GitHub Personal Access Token to upload image:');
+        if (!token) {
+          setIsUploading(false);
+          return;
+        }
+
+        const response = await fetch(`https://api.github.com/repos/TobiasBoscoBrown/taxjet-website/contents/public/${fileName}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: `Upload hero image: ${file.name}`,
+            content: base64String,
+          }),
+        });
+
+        if (response.ok) {
+          setEditingPost({ ...editingPost, heroImage: `/${fileName}` });
+        } else {
+          const errorData = await response.json();
+          setUploadError(errorData.message || 'Failed to upload image');
+        }
+        setIsUploading(false);
+      };
+    } catch (error) {
+      setUploadError('Failed to read image file');
+      setIsUploading(false);
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <main className="min-h-screen bg-[#0a0a0a] text-white">
@@ -311,14 +390,48 @@ ${editingPost.content || ''}`;
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white/70">Hero Image URL</label>
-                  <input
-                    type="text"
-                    value={editingPost.heroImage || ''}
-                    onChange={(e) => setEditingPost({ ...editingPost, heroImage: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-white/30 transition-colors text-white"
-                  />
+                  <label className="block text-sm font-medium mb-2 text-white/70">Hero Image</label>
+                  <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() => document.getElementById('hero-image-input')?.click()}
+                    className={`w-full p-8 border-2 border-dashed rounded-lg cursor-pointer transition-colors text-center ${
+                      isDragging
+                        ? 'border-blue-400 bg-blue-400/10'
+                        : 'border-white/20 bg-white/5 hover:bg-white/10'
+                    }`}
+                  >
+                    <input
+                      id="hero-image-input"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                    {editingPost.heroImage ? (
+                      <div className="space-y-3">
+                        <img
+                          src={editingPost.heroImage}
+                          alt="Hero preview"
+                          className="max-h-40 mx-auto rounded-lg object-contain"
+                        />
+                        <p className="text-white/60 text-sm">{editingPost.heroImage}</p>
+                        <p className="text-white/40 text-xs">Drop or click to replace</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <p className="text-white/60">Drop an image here, or click to upload</p>
+                        <p className="text-white/40 text-xs">PNG, JPG, GIF up to 5MB</p>
+                      </div>
+                    )}
+                    {isUploading && (
+                      <p className="text-blue-400 text-sm mt-2">Uploading to GitHub...</p>
+                    )}
+                    {uploadError && (
+                      <p className="text-red-400 text-sm mt-2">{uploadError}</p>
+                    )}
+                  </div>
                 </div>
 
                 <div>

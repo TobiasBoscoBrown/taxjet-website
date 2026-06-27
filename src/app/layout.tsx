@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import JetstreamAnimation from "@/components/JetstreamAnimation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -79,7 +80,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <JetstreamAnimation />
+        {children}
+      </body>
     </html>
   );
 }

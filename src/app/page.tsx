@@ -3,7 +3,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Navigation from '@/components/Navigation';
-import JetstreamAnimation from '@/components/JetstreamAnimation';
 import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 export default function Home() {
@@ -18,7 +17,6 @@ export default function Home() {
   return (
     <main ref={ref} className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden">
       <AtmosphericTextures />
-      <JetstreamAnimation />
       <Navigation />
 
       {/* Hero Section */}
