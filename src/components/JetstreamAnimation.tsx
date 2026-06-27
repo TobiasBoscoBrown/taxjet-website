@@ -12,7 +12,7 @@ export default function JetstreamAnimation() {
   const jetX = useSpring(useTransform(scrollYProgress, [0, 1], [400, 500]), { stiffness: 50, damping: 20 });
   const jetY = useSpring(useTransform(scrollYProgress, [0, 1], [540, 520]), { stiffness: 50, damping: 20 });
   const jetFloatY = useTransform(scrollYProgress, [0, 1], [0, 0]);
-  const jetRotate = useSpring(useTransform(scrollYProgress, [0, 1], [0, 2]), { stiffness: 50, damping: 20 });
+  const jetRotate = useSpring(useTransform(scrollYProgress, [0, 1], [-90, -88]), { stiffness: 50, damping: 20 });
 
   // Stream path that flows continuously
   const streamPath = useRef('');
