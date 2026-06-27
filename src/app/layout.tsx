@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import JetstreamAnimation from "@/components/JetstreamAnimation";
+import PageTransition from "@/components/PageTransition";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -82,7 +83,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <JetstreamAnimation />
-        {children}
+        <PageTransition>
+          {children}
+        </PageTransition>
       </body>
     </html>
   );
