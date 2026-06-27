@@ -4,7 +4,6 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
-import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 export default function Home() {
   const ref = useRef(null);
@@ -17,7 +16,6 @@ export default function Home() {
 
   return (
     <main ref={ref} className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden">
-      <AtmosphericTextures />
       <Navigation />
 
       {/* Hero Section */}
