@@ -4,12 +4,11 @@ import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 import Image from 'next/image';
 
 const textures = [
-  { src: '/textures/globe.png', position: 'top-[5%] left-[-3%]', size: 'w-96 h-96', speed: 0.12, rotate: -6, opacity: 0.04 },
-  { src: '/textures/irs-forms.png', position: 'top-[8%] right-[3%]', size: 'w-80 h-80', speed: 0.18, rotate: 8, opacity: 0.035 },
-  { src: '/textures/passport-stamps.png', position: 'top-[40%] left-[5%]', size: 'w-72 h-72', speed: 0.15, rotate: -12, opacity: 0.04 },
-  { src: '/textures/country-codes.png', position: 'bottom-[12%] right-[8%]', size: 'w-80 h-80', speed: 0.22, rotate: 5, opacity: 0.035 },
-  { src: '/textures/handwritten-seal.png', position: 'bottom-[3%] left-[12%]', size: 'w-64 h-64', speed: 0.14, rotate: -8, opacity: 0.035 },
-  { src: '/textures/jetstream.png', position: 'top-[55%] right-[-5%]', size: 'w-[28rem] h-[28rem]', speed: 0.25, rotate: 15, opacity: 0.03 },
+  { src: '/textures/chrome_0wytEPGmmL.png', position: 'top-[5%] left-[-3%]', size: 'w-96 h-96', speed: 0.12, rotate: -6, opacity: 0.04 },
+  { src: '/textures/chrome_8Jzbf2QJWe.png', position: 'top-[8%] right-[3%]', size: 'w-80 h-80', speed: 0.18, rotate: 8, opacity: 0.035 },
+  { src: '/textures/chrome_DPonTiXsM6.png', position: 'top-[40%] left-[5%]', size: 'w-72 h-72', speed: 0.15, rotate: -12, opacity: 0.04 },
+  { src: '/textures/chrome_VIe1a7ua3a.png', position: 'bottom-[12%] right-[8%]', size: 'w-80 h-80', speed: 0.22, rotate: 5, opacity: 0.035 },
+  { src: '/textures/chrome_lmSr9fD6at.png', position: 'bottom-[3%] left-[12%]', size: 'w-64 h-64', speed: 0.14, rotate: -8, opacity: 0.035 },
 ];
 
 function TextureLayer({ texture, index, scrollYProgress }: {
