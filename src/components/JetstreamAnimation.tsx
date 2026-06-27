@@ -30,89 +30,60 @@ export default function JetstreamAnimation() {
   const bubbleIdRef = useRef(0);
   const animationFrameRef = useRef<number>();
 
-  // Spawn a new jet periodically
+  // Spawn a new jet periodically (only 1 at a time)
   useEffect(() => {
     const spawnJet = () => {
-      const id = jetIdRef.current++;
-      
-      // Random spawn position off-screen
-      const side = Math.floor(Math.random() * 4);
-      let startX: number, startY: number;
+      // Only spawn if no jets currently exist
+      setJets(prev => {
+        if (prev.length > 0) return prev;
 
-      switch(side) {
-        case 0: // top
-          startX = Math.random() * 1920;
-          startY = -200;
-          break;
-        case 1: // right
-          startX = 2120;
-          startY = Math.random() * 1080;
-          break;
-        case 2: // bottom
-          startX = Math.random() * 1920;
-          startY = 1280;
-          break;
-        case 3: // left
-          startX = -200;
-          startY = Math.random() * 1080;
-          break;
-        default:
-          startX = 0;
-          startY = 0;
-      }
+        const id = jetIdRef.current++;
 
-      // Random target position on opposite side
-      const targetSide = (side + 2) % 4;
-      let targetX: number, targetY: number;
+        // Random spawn position off-screen (left or right for horizontal crossing)
+        const fromLeft = Math.random() > 0.5;
+        let startX: number, startY: number, targetX: number, targetY: number;
 
-      switch(targetSide) {
-        case 0:
-          targetX = Math.random() * 1920;
-          targetY = -200;
-          break;
-        case 1:
-          targetX = 2120;
-          targetY = Math.random() * 1080;
-          break;
-        case 2:
-          targetX = Math.random() * 1920;
-          targetY = 1280;
-          break;
-        case 3:
-          targetX = -200;
-          targetY = Math.random() * 1080;
-          break;
-        default:
-          targetX = 0;
-          targetY = 0;
-      }
+        if (fromLeft) {
+          startX = -300;
+          startY = 200 + Math.random() * 680; // Random Y position
+          targetX = 2220;
+          targetY = startY; // Same Y for straight horizontal flight
+        } else {
+          startX = 2220;
+          startY = 200 + Math.random() * 680;
+          targetX = -300;
+          targetY = startY;
+        }
 
-      // Calculate rotation to face target (add 90 degrees since jet image points up)
-      const angle = Math.atan2(targetY - startY, targetX - startX);
-      const rotation = (angle * 180) / Math.PI + 90;
+        // Calculate rotation to face target (add 90 degrees since jet image points up)
+        const angle = Math.atan2(targetY - startY, targetX - startX);
+        const rotation = (angle * 180) / Math.PI + 90;
 
-      setJets(prev => [...prev, {
-        id,
-        x: startX,
-        y: startY,
-        targetX,
-        targetY,
-        rotation,
-        opacity: 0
-      }]);
+        const newJet = {
+          id,
+          x: startX,
+          y: startY,
+          targetX,
+          targetY,
+          rotation,
+          opacity: 0
+        };
 
-      // Remove jet after it reaches target
-      setTimeout(() => {
-        setJets(prev => prev.filter(j => j.id !== id));
-      }, 15000);
+        // Remove jet after it reaches target (about 20 seconds for full crossing)
+        setTimeout(() => {
+          setJets(prev => prev.filter(j => j.id !== id));
+          // Spawn next jet after a delay
+          setTimeout(spawnJet, 3000);
+        }, 20000);
+
+        return [newJet];
+      });
     };
 
     // Spawn first jet immediately
     spawnJet();
 
-    // Spawn new jets periodically
-    const interval = setInterval(spawnJet, 8000);
-    return () => clearInterval(interval);
+    return () => {};
   }, []);
 
   // Animation loop for jets and bubbles
