@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import AtmosphericTextures from '@/components/AtmosphericTextures';
 
@@ -22,65 +23,69 @@ export default function Home() {
       {/* Hero Section */}
       <motion.section
         style={{ y, opacity }}
-        className="relative z-20 min-h-screen flex items-center justify-center px-6"
+        className="relative z-20 min-h-screen flex flex-col items-center justify-center px-6 pt-20"
       >
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="text-center md:text-left">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              className="mb-6"
-            >
-              <span className="text-sm font-medium tracking-widest text-white/60 uppercase">
-                U.S. Expat & International Tax Specialists
-              </span>
-            </motion.div>
+        <div className="max-w-5xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="mb-8"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm font-medium tracking-widest text-white/50 uppercase">
+              U.S. Expat & International Tax Specialists
+            </span>
+          </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8"
-            >
-              Navigate Foreign Income
-              <br />
-              <span className="text-white/60">Without Turbulence</span>
-            </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight leading-[1.05] mb-8"
+          >
+            Navigate Foreign Income
+            <span className="block text-white/40">Without Turbulence</span>
+          </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.6 }}
-              className="text-xl md:text-2xl text-white/70 max-w-xl mb-12 leading-relaxed"
-            >
-              We help Americans worldwide handle foreign income, overseas assets, and cross-border tax rules quickly, clearly, and without turbulence.
-            </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6 }}
+            className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto mb-12 leading-relaxed"
+          >
+            We help Americans abroad handle foreign income, overseas assets, and cross-border tax rules with clarity and calm.
+          </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Link
+              href="/contact"
+              className="px-8 py-4 bg-white text-black rounded-full text-base font-medium hover:bg-white/90 transition-colors duration-300"
             >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white text-black rounded-full text-lg font-medium hover:bg-white/90 transition-colors"
-              >
-                Get Started
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 border border-white/30 rounded-full text-lg font-medium hover:bg-white/10 transition-colors"
-              >
-                Learn More
-              </motion.button>
-            </motion.div>
-          </div>
-
+              Get Started
+            </Link>
+            <Link
+              href="/services"
+              className="px-8 py-4 border border-white/20 rounded-full text-base font-medium hover:bg-white/5 hover:border-white/30 transition-colors duration-300"
+            >
+              Explore Services
+            </Link>
+          </motion.div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.2 }}
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30 text-sm"
+        >
+          <span className="tracking-widest uppercase">Scroll</span>
+          <div className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent" />
+        </motion.div>
       </motion.section>
 
       {/* Services Preview */}
