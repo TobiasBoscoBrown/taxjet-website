@@ -111,18 +111,20 @@ export default function JetstreamAnimation() {
           speed = 0.8;
         }
 
-        // Emit stream particles continuously
+        // Emit stream particles continuously from behind the jet
         if (jet.phase !== 'fade-out' || newOpacity > 0.1) {
-          const emitCount = 2;
+          const emitCount = 4;
+          const direction = jet.targetX > jet.x ? -1 : 1;
           for (let i = 0; i < emitCount; i++) {
-            const spread = (Math.random() - 0.5) * 30;
+            const spread = (Math.random() - 0.5) * 20;
+            const offset = 60 + Math.random() * 40;
             setStreamParticles(prev => [...prev, {
               id: particleIdRef.current++,
-              x: jet.x + spread,
+              x: jet.x + (direction * offset) + spread,
               y: jet.y + spread,
               life: 1,
-              size: 2 + Math.random() * 4,
-              opacity: 0.12
+              size: 3 + Math.random() * 5,
+              opacity: 0.18
             }]);
           }
         }
@@ -189,9 +191,9 @@ export default function JetstreamAnimation() {
       setStreamParticles(prev => prev
         .map(particle => ({
           ...particle,
-          life: particle.life - 0.006,
-          size: particle.size + 0.08,
-          opacity: particle.opacity * 0.992
+          life: particle.life - 0.005,
+          size: particle.size + 0.12,
+          opacity: particle.opacity * 0.994
         }))
         .filter(particle => particle.life > 0)
       );
@@ -235,7 +237,7 @@ export default function JetstreamAnimation() {
             cx={particle.x}
             cy={particle.y}
             r={particle.size}
-            fill={`rgba(180, 195, 220, ${particle.opacity})`}
+            fill={`rgba(150, 180, 220, ${particle.opacity})`}
             filter="url(#streamGlow)"
           />
         ))}
