@@ -151,7 +151,7 @@ export default function JetstreamAnimation() {
         </motion.g>
 
         {/* Floating ambient particles */}
-        {[...Array(20)].map((_, i) => (
+        {[...Array(5)].map((_, i) => (
           <motion.circle
             key={i}
             cx={200 + Math.random() * 1520}
