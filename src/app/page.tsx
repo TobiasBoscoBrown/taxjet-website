@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import AtmosphericTextures from '@/components/AtmosphericTextures';
 
 export default function Home() {
   const ref = useRef(null);
@@ -16,6 +17,7 @@ export default function Home() {
 
   return (
     <main ref={ref} className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden">
+      <AtmosphericTextures />
       <Navigation />
 
       {/* Hero Section */}
@@ -90,10 +92,10 @@ export default function Home() {
       <section className="relative z-20 py-32 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
             className="text-center mb-20"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h2>
@@ -122,12 +124,12 @@ export default function Home() {
             ].map((service, index) => (
               <motion.div
                 key={service.title}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                whileHover={{ y: -10 }}
-                className="p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors"
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 1, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+                whileHover={{ y: -4, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
+                className="p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-colors duration-500"
               >
                 <div className="mb-4">
                   {service.icon === 'globe' && (
@@ -167,10 +169,10 @@ export default function Home() {
       <section className="relative z-20 py-32 px-6 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
             className="text-center mb-20"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Why TaxJet?</h2>
@@ -200,10 +202,10 @@ export default function Home() {
             ].map((feature, index) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 1, delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
                 className="p-8"
               >
                 <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
@@ -218,10 +220,10 @@ export default function Home() {
       <section className="relative z-20 py-32 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <h2 className="text-4xl md:text-6xl font-bold mb-8">
               Let's Tackle Your Tax Needs Together
@@ -230,9 +232,10 @@ export default function Home() {
               Get started today and experience stress-free expat tax filing
             </p>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-12 py-5 bg-white text-black rounded-full text-xl font-medium hover:bg-white/90 transition-colors"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              className="px-12 py-5 bg-white text-black rounded-full text-xl font-medium hover:bg-white/90 transition-colors duration-300"
             >
               Get Started Now
             </motion.button>
