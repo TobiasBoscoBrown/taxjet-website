@@ -1,42 +1,191 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+
+interface Jet {
+  id: number;
+  x: number;
+  y: number;
+  targetX: number;
+  targetY: number;
+  rotation: number;
+  opacity: number;
+}
+
+interface Bubble {
+  id: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  size: number;
+}
 
 export default function JetstreamAnimation() {
-  const { scrollYProgress } = useScroll();
+  const [jets, setJets] = useState<Jet[]>([]);
+  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const jetIdRef = useRef(0);
+  const bubbleIdRef = useRef(0);
+  const animationFrameRef = useRef<number>();
 
-  // Jet follows scroll with very subtle motion
-  const jetX = useTransform(scrollYProgress, [0, 1], [-300, 2220]);
-  const jetY = useTransform(scrollYProgress, [0, 0.5, 1], [580, 520, 560]);
+  // Spawn a new jet periodically
+  useEffect(() => {
+    const spawnJet = () => {
+      const id = jetIdRef.current++;
+      
+      // Random spawn position off-screen
+      const side = Math.floor(Math.random() * 4);
+      let startX: number, startY: number;
 
-  // Very subtle rotation
-  const jetRotate = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [-2, 1, -1]
-  );
+      switch(side) {
+        case 0: // top
+          startX = Math.random() * 1920;
+          startY = -200;
+          break;
+        case 1: // right
+          startX = 2120;
+          startY = Math.random() * 1080;
+          break;
+        case 2: // bottom
+          startX = Math.random() * 1920;
+          startY = 1280;
+          break;
+        case 3: // left
+          startX = -200;
+          startY = Math.random() * 1080;
+          break;
+        default:
+          startX = 0;
+          startY = 0;
+      }
+
+      // Random target position on opposite side
+      const targetSide = (side + 2) % 4;
+      let targetX: number, targetY: number;
+
+      switch(targetSide) {
+        case 0:
+          targetX = Math.random() * 1920;
+          targetY = -200;
+          break;
+        case 1:
+          targetX = 2120;
+          targetY = Math.random() * 1080;
+          break;
+        case 2:
+          targetX = Math.random() * 1920;
+          targetY = 1280;
+          break;
+        case 3:
+          targetX = -200;
+          targetY = Math.random() * 1080;
+          break;
+        default:
+          targetX = 0;
+          targetY = 0;
+      }
+
+      // Calculate rotation to face target
+      const angle = Math.atan2(targetY - startY, targetX - startX);
+      const rotation = (angle * 180) / Math.PI;
+
+      setJets(prev => [...prev, {
+        id,
+        x: startX,
+        y: startY,
+        targetX,
+        targetY,
+        rotation,
+        opacity: 0
+      }]);
+
+      // Remove jet after it reaches target
+      setTimeout(() => {
+        setJets(prev => prev.filter(j => j.id !== id));
+      }, 15000);
+    };
+
+    // Spawn first jet immediately
+    spawnJet();
+
+    // Spawn new jets periodically
+    const interval = setInterval(spawnJet, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Animation loop for jets and bubbles
+  useEffect(() => {
+    const animate = () => {
+      const now = Date.now();
+
+      // Update jet positions
+      setJets(prev => prev.map(jet => {
+        const dx = jet.targetX - jet.x;
+        const dy = jet.targetY - jet.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const speed = 0.8; // Slow speed
+
+        if (distance < 10) {
+          return jet;
+        }
+
+        const newX = jet.x + (dx / distance) * speed;
+        const newY = jet.y + (dy / distance) * speed;
+
+        // Emit bubbles behind jet
+        if (Math.random() < 0.3) {
+          const angle = Math.atan2(dy, dx) + Math.PI + (Math.random() - 0.5) * 0.5;
+          const bubbleSpeed = 0.5 + Math.random() * 0.5;
+          setBubbles(prev => [...prev, {
+            id: bubbleIdRef.current++,
+            x: newX - Math.cos(angle) * 50,
+            y: newY - Math.sin(angle) * 50,
+            vx: Math.cos(angle) * bubbleSpeed,
+            vy: Math.sin(angle) * bubbleSpeed,
+            life: 1,
+            size: 3 + Math.random() * 5
+          }]);
+        }
+
+        return {
+          ...jet,
+          x: newX,
+          y: newY,
+          opacity: Math.min(jet.opacity + 0.01, 0.7)
+        };
+      }));
+
+      // Update bubbles
+      setBubbles(prev => prev
+        .map(bubble => ({
+          ...bubble,
+          x: bubble.x + bubble.vx,
+          y: bubble.y + bubble.vy,
+          life: bubble.life - 0.008,
+          size: bubble.size + 0.1
+        }))
+        .filter(bubble => bubble.life > 0)
+      );
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
       <svg className="w-full h-full" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
         <defs>
-          <linearGradient id="streamGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(59, 130, 246, 0)" />
-            <stop offset="20%" stopColor="rgba(59, 130, 246, 0.12)" />
-            <stop offset="50%" stopColor="rgba(147, 197, 253, 0.18)" />
-            <stop offset="80%" stopColor="rgba(59, 130, 246, 0.08)" />
-            <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
-          </linearGradient>
-
-          <linearGradient id="coreStreamGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(255, 255, 255, 0)" />
-            <stop offset="35%" stopColor="rgba(255, 255, 255, 0.08)" />
-            <stop offset="65%" stopColor="rgba(255, 255, 255, 0.1)" />
-            <stop offset="100%" stopColor="rgba(255, 255, 255, 0)" />
-          </linearGradient>
-
-          <filter id="streamGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="12" result="blur"/>
+          <filter id="bubbleGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
             <feMerge>
               <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
@@ -44,7 +193,7 @@ export default function JetstreamAnimation() {
           </filter>
 
           <filter id="jetGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feGaussianBlur stdDeviation="4" result="blur"/>
             <feMerge>
               <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
@@ -52,42 +201,32 @@ export default function JetstreamAnimation() {
           </filter>
         </defs>
 
-        {/* Gentle, flowing stream - no wiggling */}
-        <motion.path
-          d="M -400 540 C 200 520, 700 500, 960 540 S 1800 580, 2400 540"
-          stroke="url(#streamGradient)"
-          strokeWidth="100"
-          fill="none"
-          filter="url(#streamGlow)"
-          strokeLinecap="round"
-          initial={{ opacity: 0, pathLength: 0 }}
-          animate={{ opacity: 0.5, pathLength: 1 }}
-          transition={{ duration: 3, ease: "easeOut" }}
-        />
-
-        <motion.path
-          d="M -400 540 C 200 510, 700 490, 960 540 S 1800 590, 2400 540"
-          stroke="url(#coreStreamGradient)"
-          strokeWidth="40"
-          fill="none"
-          filter="url(#streamGlow)"
-          strokeLinecap="round"
-          initial={{ opacity: 0, pathLength: 0 }}
-          animate={{ opacity: 0.4, pathLength: 1 }}
-          transition={{ duration: 3, ease: "easeOut", delay: 0.3 }}
-        />
-
-        {/* Jet follows scroll with subtle motion */}
-        <motion.g style={{ x: jetX, y: jetY, rotate: jetRotate }}>
-          <image
-            href="/jet.png"
-            width="400"
-            height="200"
-            x="-200"
-            y="-100"
-            filter="url(#jetGlow)"
+        {/* Bubbles */}
+        {bubbles.map(bubble => (
+          <circle
+            key={bubble.id}
+            cx={bubble.x}
+            cy={bubble.y}
+            r={bubble.size}
+            fill={`rgba(147, 197, 253, ${bubble.life * 0.3})`}
+            filter="url(#bubbleGlow)"
           />
-        </motion.g>
+        ))}
+
+        {/* Jets */}
+        {jets.map(jet => (
+          <g key={jet.id} transform={`translate(${jet.x}, ${jet.y}) rotate(${jet.rotation})`}>
+            <image
+              href="/jet.png"
+              width="200"
+              height="100"
+              x="-100"
+              y="-50"
+              opacity={jet.opacity}
+              filter="url(#jetGlow)"
+            />
+          </g>
+        ))}
       </svg>
     </div>
   );
