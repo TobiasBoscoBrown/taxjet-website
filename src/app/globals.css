@@ -58,3 +58,12 @@ h1, h2, h3, .font-display {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+@layer components {
+  .cms-input {
+    @apply w-full px-4 py-3 bg-white/70 border border-ink/10 rounded-lg text-ink transition-colors;
+  }
+  .cms-input:focus {
+    @apply outline-none border-ink/30;
+  }
+}
