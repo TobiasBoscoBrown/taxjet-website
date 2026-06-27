@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion, useSpring, useMotionValue } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
 interface Jet {
@@ -11,29 +11,29 @@ interface Jet {
   targetY: number;
   rotation: number;
   opacity: number;
+  phase: 'fade-in' | 'flying' | 'fade-out';
+  progress: number;
 }
 
-interface Bubble {
+interface StreamParticle {
   id: number;
   x: number;
   y: number;
-  vx: number;
-  vy: number;
   life: number;
   size: number;
+  opacity: number;
 }
 
 export default function JetstreamAnimation() {
   const [jets, setJets] = useState<Jet[]>([]);
-  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [streamParticles, setStreamParticles] = useState<StreamParticle[]>([]);
   const jetIdRef = useRef(0);
-  const bubbleIdRef = useRef(0);
+  const particleIdRef = useRef(0);
   const animationFrameRef = useRef<number>();
 
   // Spawn a new jet periodically (only 1 at a time)
   useEffect(() => {
     const spawnJet = () => {
-      // Only spawn if no jets currently exist
       setJets(prev => {
         if (prev.length > 0) return prev;
 
@@ -44,100 +44,156 @@ export default function JetstreamAnimation() {
         let startX: number, startY: number, targetX: number, targetY: number;
 
         if (fromLeft) {
-          startX = -300;
-          startY = 200 + Math.random() * 680; // Random Y position
-          targetX = 2220;
-          targetY = startY; // Same Y for straight horizontal flight
+          startX = -400;
+          startY = 300 + Math.random() * 480;
+          targetX = 2320;
+          targetY = startY;
         } else {
-          startX = 2220;
-          startY = 200 + Math.random() * 680;
-          targetX = -300;
+          startX = 2320;
+          startY = 300 + Math.random() * 480;
+          targetX = -400;
           targetY = startY;
         }
 
-        // Calculate rotation to face target (add 90 degrees since jet image points up)
         const angle = Math.atan2(targetY - startY, targetX - startX);
         const rotation = (angle * 180) / Math.PI + 90;
 
-        const newJet = {
+        const newJet: Jet = {
           id,
           x: startX,
           y: startY,
           targetX,
           targetY,
           rotation,
-          opacity: 0
+          opacity: 0,
+          phase: 'fade-in',
+          progress: 0
         };
-
-        // Remove jet after it reaches target (about 20 seconds for full crossing)
-        setTimeout(() => {
-          setJets(prev => prev.filter(j => j.id !== id));
-          // Spawn next jet after a delay
-          setTimeout(spawnJet, 3000);
-        }, 20000);
 
         return [newJet];
       });
     };
 
-    // Spawn first jet immediately
     spawnJet();
-
     return () => {};
   }, []);
 
-  // Animation loop for jets and bubbles
+  // Animation loop
   useEffect(() => {
     const animate = () => {
-      const now = Date.now();
-
-      // Update jet positions
       setJets(prev => prev.map(jet => {
         const dx = jet.targetX - jet.x;
         const dy = jet.targetY - jet.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const speed = 0.8; // Slow speed
+        const totalDistance = Math.sqrt(
+          Math.pow(jet.targetX - (jet.targetX > jet.x ? -400 : 2320), 2) +
+          Math.pow(jet.targetY - jet.y, 2)
+        );
+        const currentDistance = Math.sqrt(dx * dx + dy * dy);
+        const progress = 1 - (currentDistance / totalDistance);
 
-        if (distance < 10) {
+        let newOpacity = jet.opacity;
+        let newPhase = jet.phase;
+        let speed = 1.2;
+
+        // Fade in at start
+        if (jet.phase === 'fade-in') {
+          newOpacity = Math.min(jet.opacity + 0.008, 0.6);
+          if (newOpacity >= 0.6) {
+            newPhase = 'flying';
+          }
+        }
+        // Fade out near end
+        else if (jet.phase === 'flying' && progress > 0.85) {
+          newPhase = 'fade-out';
+        }
+        else if (jet.phase === 'fade-out') {
+          newOpacity = Math.max(jet.opacity - 0.01, 0);
+          speed = 0.8;
+        }
+
+        // Emit stream particles continuously
+        if (jet.phase !== 'fade-out' || newOpacity > 0.1) {
+          const emitCount = 2;
+          for (let i = 0; i < emitCount; i++) {
+            const spread = (Math.random() - 0.5) * 30;
+            setStreamParticles(prev => [...prev, {
+              id: particleIdRef.current++,
+              x: jet.x + spread,
+              y: jet.y + spread,
+              life: 1,
+              size: 2 + Math.random() * 4,
+              opacity: 0.12
+            }]);
+          }
+        }
+
+        // Check if jet should be removed
+        if (newOpacity <= 0 && jet.phase === 'fade-out') {
+          setTimeout(() => {
+            setJets(prev => prev.filter(j => j.id !== jet.id));
+            setTimeout(() => {
+              setJets(prev => {
+                if (prev.length === 0) {
+                  const id = jetIdRef.current++;
+                  const fromLeft = Math.random() > 0.5;
+                  let startX: number, startY: number, targetX: number, targetY: number;
+
+                  if (fromLeft) {
+                    startX = -400;
+                    startY = 300 + Math.random() * 480;
+                    targetX = 2320;
+                    targetY = startY;
+                  } else {
+                    startX = 2320;
+                    startY = 300 + Math.random() * 480;
+                    targetX = -400;
+                    targetY = startY;
+                  }
+
+                  const angle = Math.atan2(targetY - startY, targetX - startX);
+                  const rotation = (angle * 180) / Math.PI + 90;
+
+                  return [...prev, {
+                    id,
+                    x: startX,
+                    y: startY,
+                    targetX,
+                    targetY,
+                    rotation,
+                    opacity: 0,
+                    phase: 'fade-in' as const,
+                    progress: 0
+                  }];
+                }
+                return prev;
+              });
+            }, 2000);
+          }, 100);
           return jet;
         }
 
-        const newX = jet.x + (dx / distance) * speed;
-        const newY = jet.y + (dy / distance) * speed;
-
-        // Emit bubbles behind jet
-        if (Math.random() < 0.3) {
-          const angle = Math.atan2(dy, dx) + Math.PI + (Math.random() - 0.5) * 0.5;
-          const bubbleSpeed = 0.5 + Math.random() * 0.5;
-          setBubbles(prev => [...prev, {
-            id: bubbleIdRef.current++,
-            x: newX - Math.cos(angle) * 80,
-            y: newY - Math.sin(angle) * 80,
-            vx: Math.cos(angle) * bubbleSpeed,
-            vy: Math.sin(angle) * bubbleSpeed,
-            life: 1,
-            size: 3 + Math.random() * 5
-          }]);
-        }
+        const newX = jet.x + (dx / currentDistance) * speed;
+        const newY = jet.y + (dy / currentDistance) * speed;
 
         return {
           ...jet,
           x: newX,
           y: newY,
-          opacity: Math.min(jet.opacity + 0.01, 0.7)
+          opacity: newOpacity,
+          phase: newPhase,
+          progress
         };
       }));
 
-      // Update bubbles
-      setBubbles(prev => prev
-        .map(bubble => ({
-          ...bubble,
-          x: bubble.x + bubble.vx,
-          y: bubble.y + bubble.vy,
-          life: bubble.life - 0.008,
-          size: bubble.size + 0.1
+      // Update stream particles
+      setStreamParticles(prev => prev
+        .map(particle => ({
+          ...particle,
+          life: particle.life - 0.006,
+          size: particle.size + 0.08,
+          opacity: particle.opacity * 0.992
         }))
-        .filter(bubble => bubble.life > 0)
+        .filter(particle => particle.life > 0)
       );
 
       animationFrameRef.current = requestAnimationFrame(animate);
@@ -155,8 +211,8 @@ export default function JetstreamAnimation() {
     <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
       <svg className="w-full h-full" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
         <defs>
-          <filter id="bubbleGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
+          <filter id="streamGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
             <feMerge>
               <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
@@ -164,7 +220,7 @@ export default function JetstreamAnimation() {
           </filter>
 
           <filter id="jetGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feGaussianBlur stdDeviation="5" result="blur"/>
             <feMerge>
               <feMergeNode in="blur"/>
               <feMergeNode in="SourceGraphic"/>
@@ -172,15 +228,15 @@ export default function JetstreamAnimation() {
           </filter>
         </defs>
 
-        {/* Bubbles */}
-        {bubbles.map(bubble => (
+        {/* Stream particles */}
+        {streamParticles.map(particle => (
           <circle
-            key={bubble.id}
-            cx={bubble.x}
-            cy={bubble.y}
-            r={bubble.size}
-            fill={`rgba(200, 210, 230, ${bubble.life * 0.15})`}
-            filter="url(#bubbleGlow)"
+            key={particle.id}
+            cx={particle.x}
+            cy={particle.y}
+            r={particle.size}
+            fill={`rgba(180, 195, 220, ${particle.opacity})`}
+            filter="url(#streamGlow)"
           />
         ))}
 
@@ -189,10 +245,10 @@ export default function JetstreamAnimation() {
           <g key={jet.id} transform={`translate(${jet.x}, ${jet.y}) rotate(${jet.rotation})`}>
             <image
               href="/jet.png"
-              width="200"
-              height="100"
-              x="-100"
-              y="-50"
+              width="180"
+              height="90"
+              x="-90"
+              y="-45"
               opacity={jet.opacity}
               filter="url(#jetGlow)"
             />
