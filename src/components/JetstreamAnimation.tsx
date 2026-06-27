@@ -3,16 +3,31 @@
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
+interface Jet {
+  id: number;
+  x: number;
+  y: number;
+  direction: number; // 1 for right, -1 for left
+  targetY: number;
+  opacity: number;
+}
+
 export default function JetstreamAnimation() {
   const { scrollYProgress } = useScroll();
   const timeRef = useRef(0);
   const animationFrameRef = useRef<number>();
+  const [jet, setJet] = useState<Jet>({
+    id: 0,
+    x: -400,
+    y: 400,
+    direction: 1,
+    targetY: 400,
+    opacity: 0
+  });
 
-  // Jet position with scroll response and floating
-  const jetX = useSpring(useTransform(scrollYProgress, [0, 1], [400, 500]), { stiffness: 50, damping: 20 });
-  const jetY = useSpring(useTransform(scrollYProgress, [0, 1], [540, 520]), { stiffness: 50, damping: 20 });
-  const jetFloatY = useTransform(scrollYProgress, [0, 1], [0, 0]);
-  const jetRotate = useSpring(useTransform(scrollYProgress, [0, 1], [-90, -88]), { stiffness: 50, damping: 20 });
+  // Jet scroll response offsets
+  const scrollOffsetX = useSpring(useTransform(scrollYProgress, [0, 1], [0, 80]), { stiffness: 50, damping: 20 });
+  const scrollOffsetY = useSpring(useTransform(scrollYProgress, [0, 1], [0, -40]), { stiffness: 50, damping: 20 });
 
   // Stream path that flows continuously
   const streamPath = useRef('');
@@ -23,9 +38,9 @@ export default function JetstreamAnimation() {
       timeRef.current += 0.016;
       streamPhase.current = (timeRef.current * 0.5) % (Math.PI * 2);
 
-      // Generate flowing stream path
+      // Generate flowing stream path behind the jet
       const baseY = 540;
-      const amplitude = 30;
+      const amplitude = 25;
       const frequency = 0.002;
       
       let path = 'M -200 ' + baseY;
@@ -34,6 +49,33 @@ export default function JetstreamAnimation() {
         path += ` L ${x} ${y}`;
       }
       streamPath.current = path;
+
+      // Update jet position
+      setJet(prev => {
+        let newX = prev.x + prev.direction * 1.2;
+        let newDirection = prev.direction;
+        let newY = prev.y + (prev.targetY - prev.y) * 0.02;
+        let newOpacity = Math.min(prev.opacity + 0.005, 0.8);
+        let newTargetY = prev.targetY;
+
+        // When jet reaches edge, flip direction and change target Y
+        if (newX > 2200) {
+          newDirection = -1;
+          newTargetY = 300 + Math.random() * 480;
+        } else if (newX < -300) {
+          newDirection = 1;
+          newTargetY = 300 + Math.random() * 480;
+        }
+
+        return {
+          ...prev,
+          x: newX,
+          y: newY,
+          direction: newDirection,
+          targetY: newTargetY,
+          opacity: newOpacity
+        };
+      });
 
       animationFrameRef.current = requestAnimationFrame(animate);
     };
@@ -127,25 +169,24 @@ export default function JetstreamAnimation() {
           transition={{ duration: 3, delay: 0.5 }}
         />
 
-        {/* Jet with floating animation and scroll response */}
+        {/* Jet with scroll response and direction-based flip */}
         <motion.g
-          style={{ x: jetX, y: jetY }}
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          style={{ x: scrollOffsetX, y: scrollOffsetY }}
+          transform={`translate(${jet.x}, ${jet.y})`}
         >
           <motion.g
-            style={{ rotate: jetRotate }}
+            style={{ rotate: -90, scaleX: jet.direction }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: jet.opacity, scale: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            <motion.image
+            <image
               href="/jet.png"
-              width="250"
-              height="125"
-              x="-125"
-              y="-62.5"
+              width="220"
+              height="110"
+              x="-110"
+              y="-55"
               filter="url(#jetGlow)"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 0.8, scale: 1 }}
-              transition={{ duration: 2, ease: "easeOut" }}
             />
           </motion.g>
         </motion.g>
