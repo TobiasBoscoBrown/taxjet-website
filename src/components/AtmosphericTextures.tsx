@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
 /**
  * Layered atmospheric texture built from REAL documents, drawn as crisp inline
@@ -117,7 +118,9 @@ function TextureLayer({ layer, scrollYProgress }: { layer: Layer; scrollYProgres
 }
 
 export default function AtmosphericTextures() {
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
+  if (pathname === '/minimal') return null;
   return (
     <div className="document-overlay">
       {layers.map((layer, i) => (
